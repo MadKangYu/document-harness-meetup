@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Document Harness Meetup</title>
+    <meta
+      name="description"
+      content="Document Harness Meetup deck: document automation agent for DOCX, PPTX, HWP workflows."
+    />
+    <style>
+      :root {
+        --bg: #f4f8f7;
+        --ink: #050a0f;
+        --blue: #335cff;
+        --muted: #687383;
+        --faint: #9aa5b3;
+        --line: #dce5ea;
+        --panel: #ffffff;
+        --green: #1f9d68;
+        --amber: #d98b12;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #0d0d0d;
+        color: var(--ink);
+        font-family:
+          Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      }
+
+      main {
+        width: 100vw;
+        height: 100dvh;
+        display: grid;
+        place-items: center;
+      }
+
+      .deck {
+        position: relative;
+        width: min(100vw, calc(100dvh * 16 / 9));
+        height: min(100dvh, calc(100vw * 9 / 16));
+        background: var(--bg);
+        overflow: hidden;
+        box-shadow: 0 28px 80px rgba(0, 0, 0, 0.32);
+      }
+
+      .slide {
+        position: absolute;
+        inset: 0;
+        display: none;
+        padding: 8.2% 7% 6.2%;
+        background:
+          radial-gradient(circle at 86% 18%, rgba(51, 92, 255, 0.08), transparent 28%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(244, 248, 247, 0.9));
+      }
+
+      .slide.active {
+        display: block;
+      }
+
+      .brand,
+      .footer {
+        position: absolute;
+        left: 7%;
+        right: 7%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 3;
+      }
+
+      .brand {
+        top: 5%;
+      }
+
+      .brand-title {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        font-size: clamp(1rem, 1.45vw, 1.8rem);
+        font-weight: 870;
+        letter-spacing: -0.02em;
+      }
+
+      .logo {
+        width: clamp(1.8rem, 2.2vw, 2.4rem);
+        aspect-ratio: 1;
+        border-radius: 0.55rem;
+        display: grid;
+        place-items: center;
+        background: var(--blue);
+        color: white;
+        font-weight: 950;
+        box-shadow: 0 1rem 2.2rem rgba(51, 92, 255, 0.22);
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        background: #e9efff;
+        color: var(--blue);
+        font-size: clamp(0.82rem, 1.05vw, 1.35rem);
+        font-weight: 900;
+        padding: 0.55em 0.85em;
+        white-space: nowrap;
+      }
+
+      .footer {
+        bottom: 4.1%;
+        color: var(--muted);
+        font-size: clamp(0.8rem, 1.02vw, 1.25rem);
+        font-weight: 760;
+      }
+
+      .page-num {
+        color: var(--ink);
+        font-size: clamp(1.1rem, 1.5vw, 1.85rem);
+        font-weight: 900;
+      }
+
+      .content {
+        position: relative;
+        z-index: 2;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .kicker {
+        color: var(--muted);
+        font-size: clamp(1.05rem, 1.45vw, 1.8rem);
+        font-weight: 790;
+        letter-spacing: 0.12em;
+        margin-bottom: 1.1em;
+      }
+
+      h1 {
+        margin: 0;
+        max-width: 82%;
+        font-size: clamp(2.25rem, 4.85vw, 5.8rem);
+        line-height: 1.08;
+        letter-spacing: -0.058em;
+        font-weight: 950;
+      }
+
+      .cover h1 {
+        font-size: clamp(3.4rem, 7.4vw, 8.7rem);
+        line-height: 0.98;
+        max-width: 88%;
+      }
+
+      .divider h1 {
+        font-size: clamp(3rem, 6.3vw, 7.4rem);
+      }
+
+      .blue {
+        color: var(--blue);
+      }
+
+      .body {
+        max-width: 72%;
+        margin-top: 1.25em;
+        color: var(--muted);
+        font-size: clamp(1.05rem, 1.67vw, 2rem);
+        line-height: 1.5;
+        font-weight: 650;
+      }
+
+      .cards,
+      .flow,
+      .steps,
+      .compare {
+        margin-top: 3.1%;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(var(--cols, 3), 1fr);
+        gap: 1.2vw;
+      }
+
+      .card {
+        min-height: 10.8rem;
+        padding: clamp(1rem, 1.65vw, 2rem);
+        border: 1px solid var(--line);
+        border-radius: 1rem;
+        background: var(--panel);
+        box-shadow: 0 1.5rem 4rem rgba(20, 38, 60, 0.085);
+      }
+
+      .card h2 {
+        margin: 1em 0 0;
+        font-size: clamp(1.35rem, 2.1vw, 2.45rem);
+        line-height: 1.16;
+        letter-spacing: -0.048em;
+      }
+
+      .card p {
+        margin: 0.8em 0 0;
+        color: var(--muted);
+        font-size: clamp(0.95rem, 1.28vw, 1.6rem);
+        line-height: 1.46;
+        font-weight: 650;
+      }
+
+      .compare {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.6vw;
+      }
+
+      .compare .card {
+        min-height: 23rem;
+        padding: clamp(1.4rem, 2.1vw, 2.7rem);
+      }
+
+      .featured {
+        border: 2px solid var(--blue);
+      }
+
+      .points {
+        display: grid;
+        gap: 0.7em;
+        margin-top: 1.2em;
+        font-size: clamp(0.95rem, 1.22vw, 1.55rem);
+        font-weight: 760;
+      }
+
+      .flow {
+        display: grid;
+        grid-template-columns: repeat(var(--cols, 5), 1fr);
+        gap: 0.85vw;
+      }
+
+      .flow .card {
+        min-height: 9.8rem;
+      }
+
+      .steps {
+        display: grid;
+        gap: 0.85rem;
+        max-width: 75%;
+      }
+
+      .step-row {
+        display: grid;
+        grid-template-columns: 5.4rem 1fr;
+        gap: 1.2rem;
+        align-items: center;
+        padding: clamp(0.9rem, 1.15vw, 1.4rem);
+        border: 1px solid var(--line);
+        border-radius: 1rem;
+        background: var(--panel);
+        box-shadow: 0 1rem 2.4rem rgba(20, 38, 60, 0.06);
+        font-size: clamp(1rem, 1.42vw, 1.75rem);
+        font-weight: 800;
+      }
+
+      .note {
+        max-width: 78%;
+        margin-top: 1.6rem;
+        border: 2px solid var(--blue);
+        border-radius: 1rem;
+        padding: 1rem 1.3rem;
+        background: rgba(255, 255, 255, 0.76);
+        font-size: clamp(1rem, 1.32vw, 1.65rem);
+        font-weight: 850;
+      }
+
+      .cover-line {
+        position: absolute;
+        top: 7.6%;
+        left: 7%;
+        right: 7%;
+        height: 2px;
+        background: var(--ink);
+      }
+
+      .cover-nav {
+        position: absolute;
+        top: 5.4%;
+        left: 7%;
+        right: 7%;
+        display: flex;
+        justify-content: space-between;
+        font-size: clamp(0.72rem, 1.1vw, 1.45rem);
+        font-weight: 850;
+        letter-spacing: 0.34em;
+      }
+
+      .progress {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        height: 4px;
+        width: calc((var(--index) + 1) / var(--total) * 100%);
+        background: var(--blue);
+        z-index: 10;
+      }
+
+      .hint {
+        position: fixed;
+        right: 1rem;
+        bottom: 1rem;
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 0.8rem;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      @media (max-width: 720px) {
+        .deck {
+          width: 100vw;
+          height: 100dvh;
+        }
+
+        .slide {
+          padding: 14% 7% 9%;
+        }
+
+        h1,
+        .cover h1,
+        .divider h1 {
+          max-width: 100%;
+        }
+
+        .body,
+        .steps,
+        .note {
+          max-width: 100%;
+        }
+
+        .cards,
+        .flow,
+        .compare {
+          grid-template-columns: 1fr;
+        }
+
+        .card:nth-child(n + 3),
+        .flow .card:nth-child(n + 4) {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="deck" id="deck"></div>
+    </main>
+    <div class="progress" id="progress"></div>
+    <div class="hint">← → / Space</div>
+
+    <script>
+      const repo = "https://github.com/MadKangYu/document-harness-meetup";
+      const slides = [
+        { kind: "cover", section: "Opening", title: "문서작성,<br><span class='blue'>이젠 에이전트에게</span><br>맡겨 보세요.", body: "DOCX, PPTX, HWP를 만들고 편집하고 검증 증거까지 남기는 문서 실행 에이전트." },
+        { kind: "divider", section: "01 / Context", title: "먼저,<br><span class='blue'>왜 문서인가</span>부터 보겠습니다.", body: "에이전트를 기술이 아니라 사용자의 일상 업무에서 출발시키는 이야기입니다." },
+        { kind: "cards", section: "Audience", kicker: "사용자 분포를 바꿔서 보면", title: "개발자 1-10%가 아니라<br><span class='blue'>문서 사용자 90-95%</span>가 핵심입니다.", cards: [["1-10%", "개발자 / 파워유저", "자동화 스크립트, API, 워크플로를 직접 만들 수 있는 사람들입니다."], ["90-95%", "일반 사무직", "코드는 쓰지 않지만 매일 문서를 만들고 고치고 검수합니다."], ["핵심", "대중화 접점", "AI 에이전트의 첫 경험은 코딩보다 문서에서 더 자연스럽습니다."]] },
+        { kind: "divider", section: "02 / Problem", title: "지금 문서 업무는<br><span class='blue'>흐름이 끊겨 있습니다.</span>", body: "문제는 글을 못 쓰는 것이 아니라, 자료부터 검증까지의 흐름이 분리되어 있다는 점입니다." },
+        { kind: "flow", section: "Scattered tools", kicker: "문서 작업의 현실", title: "자료, 초안, 논의, 검수가<br><span class='blue'>서로 다른 곳</span>에 있습니다.", body: "도구가 흩어질수록 맥락은 사라지고, 사람이 같은 설명을 반복하게 됩니다.", steps: ["자료는 드라이브", "초안은 워드/한글", "논의는 채팅/메일", "검수는 PPT/체크리스트", "최종본은 다시 파일"] },
+        { kind: "cards", section: "Repeated briefing", kicker: "반복되는 설명", title: "매번 다시 말하는<br><span class='blue'>문서 규칙</span>이 있습니다.", cards: [["01", "양식", "이 부서 양식대로 다시 만들어 주세요."], ["02", "인용", "인용은 항상 NCT id 기준으로 맞춰 주세요."], ["03", "톤", "임원용이라 결론 먼저, 짧게 써 주세요."], ["04", "검수", "PPT 잘렸는지, 제목 넘치는지 다시 봐 주세요."]] },
+        { kind: "story", section: "Real risk", kicker: "진짜 비용", title: "시간이 많이 드는 이유는<br><span class='blue'>작성</span>보다 <span class='blue'>재설명</span>입니다.", body: "처음부터 글을 쓰는 시간보다, 사람과 도구 사이에서 기준을 다시 맞추고 빠진 항목을 확인하는 시간이 더 커집니다." },
+        { kind: "divider", section: "03 / Product", title: "Document Harness는<br><span class='blue'>문서 실행 환경</span>입니다.", body: "챗봇이 아니라, 문서 작업을 시작해서 실제 산출물과 검증 증거까지 남기는 작업 공간입니다." },
+        { kind: "compare", section: "Definition", kicker: "제품 한 줄 정의", title: "답변 생성이 아니라,<br><span class='blue'>업무 흐름의 완결</span>입니다.", left: ["일반 챗봇", "대화창에 답을 줍니다. 이후 파일 작성, 편집, 검증, 제출은 사람이 다시 해야 합니다.", ["복사해서 문서로 옮김", "검수 기준은 별도 관리", "다음 작업에 기억이 약함"]], right: ["Document Harness", "자료를 읽고, 구조를 잡고, 파일을 만들고, 검증 증거와 handoff까지 남깁니다.", ["DOCX/PPTX/HWP 산출", "검증 체크리스트 유지", "두 번째 작업부터 재사용"]] },
+        { kind: "flow", section: "End-to-end flow", kicker: "한 화면의 흐름", title: "문서 작업의 모든 단계가<br><span class='blue'>끊기지 않고</span> 이어집니다.", steps: ["자료 입력", "플랜 확정", "초안 작성", "편집 확인", "검증", "산출물 저장"] },
+        { kind: "cards", section: "Outputs", kicker: "실제 업무 파일", title: "끝에는 말이 아니라<br><span class='blue'>편집 가능한 파일</span>이 남습니다.", cards: [["DOCX", "보고서 / 문서", "표지, 목차, 본문, 인용까지 수정 가능한 문서로 남깁니다."], ["PPTX", "발표자료", "본문 크기와 페이지 오버플로를 확인하며 PPTX로 만듭니다."], ["HWP", "조직 양식", "국문 표, 서식, 공공/내부 양식을 같은 흐름 안에서 맞춥니다."]] },
+        { kind: "divider", section: "04 / Learning", title: "핵심은<br><span class='blue'>두 번째부터 빨라지는 것</span>입니다.", body: "처음에는 알려줘야 하지만, 다음부터는 같은 기준을 에이전트가 기억하고 불러옵니다." },
+        { kind: "compare", section: "First vs second", kicker: "처음과 두 번째의 차이", title: "첫 번째는 설명하고,<br>두 번째부터는 <span class='blue'>맞춰 들어옵니다.</span>", left: ["First Run", "사용자가 청중, 깊이, 톤, 양식, 인용 규칙, 검수 기준을 알려줍니다.", ["조건 입력", "초안 생성", "수정 요청", "검증 방식 확정"]], right: ["With Hermes", "메모리, 사용자 프로필, 스킬, 큐레이터가 이전 기준을 다시 불러옵니다.", ["기준 자동 채움", "기본 템플릿 선택", "검증 루틴 재사용", "새 자료만 추가"]] },
+        { kind: "cards", section: "Learning system", kicker: "학습 구조", title: "네 가지 메커니즘이<br><span class='blue'>반복을 줄입니다.</span>", cards: [["01", "메모리", "환경, 규칙, 교훈을 기억합니다."], ["02", "사용자 프로필", "선호와 작업 스타일을 파악합니다."], ["03", "스킬 자동 생성", "반복 작업을 실행 단위로 만듭니다."], ["04", "백그라운드 큐레이터", "라이브러리를 주기적으로 정리합니다."]] },
+        { kind: "cards", section: "User profile", kicker: "예시 프로필", title: "Medical Affairs Lead라면<br><span class='blue'>이런 기준</span>이 기본값이 됩니다.", cards: [["톤", "의사결정자용", "결론 우선으로 짧고 명확하게 씁니다."], ["길이", "본문 10쪽", "실행본 기준으로 과도하게 길어지지 않게 합니다."], ["인용", "Primary RCT", "NCT id 기준으로 출처를 맞춥니다."], ["검토", "오전 확인", "야간 배치 후 오전 검토 흐름을 둡니다."]] },
+        { kind: "story", section: "Learning result", kicker: "결과", title: "사용자는 새 자료만 넣고,<br>에이전트는 <span class='blue'>이전 흐름</span>을 적용합니다.", body: "이번 분기 새 RCT만 넣으면, 이전에 확정한 청중, 톤, 인용 기준, 문서 구조, 검증 루틴을 기반으로 문서가 만들어집니다.", note: "핵심: 사용자가 프롬프트를 잘 쓰는 것이 아니라, 조직의 문서 흐름을 기억시키는 것입니다." },
+        { kind: "divider", section: "05 / How to use", title: "이제 실제 사용 방법을<br><span class='blue'>처음부터 끝까지</span> 보겠습니다.", body: "비개발자도 따라올 수 있도록 입력, 선택, 검토, 산출, 재사용 순서로 나눕니다." },
+        { kind: "steps", section: "Step 1", kicker: "사용 방법 01", title: "먼저 <span class='blue'>자료</span>를 넣습니다.", body: "PDF, 기존 DOCX, 웹 링크, 표, 메모, 회의록처럼 문서의 원재료가 되는 자료를 한 곳에 모읍니다.", steps: ["원본 자료를 업로드하거나 연결합니다.", "자료별 출처와 사용 범위를 표시합니다.", "내부 전용 자료와 외부 제출 가능 자료를 구분합니다."] },
+        { kind: "steps", section: "Step 2", kicker: "사용 방법 02", title: "다음은 <span class='blue'>목적</span>을 정합니다.", body: "에이전트가 문서를 잘 만들려면 누구에게, 왜, 어떤 결정을 위해 쓰는 문서인지 알아야 합니다.", steps: ["문서 종류를 선택합니다.", "대상을 선택합니다.", "원하는 결과를 정합니다."] },
+        { kind: "steps", section: "Step 3", kicker: "사용 방법 03", title: "<span class='blue'>양식과 규칙</span>을 확인합니다.", body: "처음에는 사람이 기준을 알려주고, 다음부터는 Hermes가 기본값을 제안합니다.", steps: ["분량, 톤, 목차 구조를 확인합니다.", "인용 방식과 금지 표현을 확인합니다.", "PPT 글자 크기, 페이지 오버플로, HWP 서식 규칙을 확인합니다."] },
+        { kind: "steps", section: "Step 4", kicker: "사용 방법 04", title: "에이전트가 <span class='blue'>초안</span>을 만듭니다.", body: "완벽한 한 번의 생성이 아니라, 구조화된 초안이 편집 가능한 형태로 나오는 것이 중요합니다.", steps: ["자료를 요약하고 문서 구조를 만듭니다.", "본문과 표, 인용, 슬라이드 문구를 생성합니다.", "사용자가 바로 편집할 수 있는 화면에 배치합니다."] },
+        { kind: "steps", section: "Step 5", kicker: "사용 방법 05", title: "사람이 <span class='blue'>편집 화면</span>에서 확인합니다.", body: "비개발자는 코드나 JSON을 볼 필요가 없습니다. 문서처럼 보고 바로 고치면 됩니다.", steps: ["잘린 제목, 긴 문장, 어색한 표현을 확인합니다.", "섹션 순서와 강조점을 바꿉니다.", "수정 요청은 다음 실행의 학습 데이터가 됩니다."] },
+        { kind: "steps", section: "Step 6", kicker: "사용 방법 06", title: "마지막으로 <span class='blue'>검증</span>합니다.", body: "문서 업무에서는 만든 파일만큼 검증 기록이 중요합니다.", steps: ["출처와 인용 누락을 확인합니다.", "형식 오류와 페이지 오버플로를 확인합니다.", "승인자, 서명란, handoff note를 남깁니다."] },
+        { kind: "steps", section: "Step 7", kicker: "사용 방법 07", title: "산출물을 <span class='blue'>내보내고 공유</span>합니다.", body: "작업의 끝은 채팅 답변이 아니라, 실제 업무에서 제출하고 수정할 수 있는 파일입니다.", steps: ["DOCX, PPTX, HWP 중 필요한 형식으로 내보냅니다.", "사용자 접근 파일과 내부 검증 파일을 분리합니다.", "handoff note와 함께 전달합니다."] },
+        { kind: "steps", section: "Step 8", kicker: "사용 방법 08", title: "같은 일을 다시 할 때<br><span class='blue'>스킬로 재사용</span>합니다.", body: "반복되는 문서 업무는 매번 새로 설명하지 않고, 조직의 작은 자동화 단위로 바뀝니다.", steps: ["자주 쓰는 문서 흐름을 스킬 후보로 저장합니다.", "검토자가 저장 여부를 확인합니다.", "다음 실행에서는 새 자료만 넣고 같은 흐름을 호출합니다."] },
+        { kind: "divider", section: "06 / Trust", title: "그래서 중요한 것은<br><span class='blue'>신뢰할 수 있는 산출</span>입니다.", body: "문서 에이전트는 빠르기만 하면 안 됩니다. 무엇을 만들었고 무엇을 확인했는지 남겨야 합니다." },
+        { kind: "cards", section: "Trust evidence", kicker: "검증 증거", title: "파일과 함께<br><span class='blue'>작업의 증거</span>가 남습니다.", cards: [["체크리스트", "확인 항목", "무엇을 확인했는지 남깁니다."], ["승인 흐름", "검토자/승인자", "검토자와 승인자를 비워두지 않습니다."], ["내부/외부 분리", "공유 범위", "공유 가능한 파일과 내부 검증 파일을 구분합니다."], ["handoff note", "다음 담당자", "다음 사람이 무엇을 이어야 하는지 남깁니다."]] },
+        { kind: "compare", section: "Business value", kicker: "도입 가치", title: "효율보다 먼저,<br><span class='blue'>반복 설명이 줄어듭니다.</span>", left: ["기존 방식", "사람이 매번 자료를 모으고, 양식을 설명하고, 검수 기준을 다시 맞춥니다.", ["도구 이동이 많음", "맥락 손실", "검증 기록 분리"]], right: ["Document Harness", "조직의 문서 흐름을 기억하고, 산출물과 검증 증거를 함께 남깁니다.", ["두 번째부터 빨라짐", "파일과 증거가 같이 남음", "비개발자도 사용 가능"]] },
+        { kind: "cards", section: "Install / Download", kicker: "받는 곳과 실행 방법", title: "설치와 다운로드는<br><span class='blue'>이 별도 프로젝트</span>에서 제공합니다.", cards: [["GitHub", "github.com/MadKangYu/document-harness-meetup", "발표자료 소스와 실행 파일이 이 저장소에 있습니다."], ["ZIP", "Download ZIP", "GitHub의 Code 버튼 또는 archive 링크로 받을 수 있습니다."], ["Local", "open index.html", "설치 없이 파일을 열거나 로컬 서버로 실행할 수 있습니다."], ["Web", "Vercel 공개 URL", "설치 없이 브라우저에서 바로 볼 수 있습니다."]] },
+        { kind: "closing", section: "Closing", kicker: "문서 작업의 모든 단계, 한 화면에서", title: "반복 문서,<br><span class='blue'>이제 에이전트에게</span><br>맡겨 보세요.", body: "AI 에이전트의 대중화는 코딩 도구에서만 일어나지 않습니다. 매일 문서를 만드는 90-95%의 사용자가 가장 쉽고 빠르게 접근하는 방식은 문서입니다." }
+      ];
+
+      const total = slides.length;
+      const deck = document.getElementById("deck");
+      const progress = document.getElementById("progress");
+
+      const badge = (text) => `<span class="pill">${text}</span>`;
+      const body = (text) => text ? `<p class="body">${text}</p>` : "";
+      const brand = (section) => `<div class="brand"><div class="brand-title"><span class="logo">+</span><span>Document Harness</span></div>${badge(section)}</div>`;
+      const footer = (i) => `<div class="footer"><span>Hermes Agent Community Meetup @ Seoul</span><span class="page-num">${String(i + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}</span></div>`;
+
+      function cards(items) {
+        const cols = Math.min(items.length, 4);
+        return `<div class="cards" style="--cols:${cols}">${items.map(([label, title, text]) => `<article class="card">${badge(label)}<h2>${title}</h2><p>${text}</p></article>`).join("")}</div>`;
+      }
+
+      function flow(items) {
+        return `<div class="flow" style="--cols:${items.length}">${items.map((item, i) => `<article class="card">${badge(String(i + 1).padStart(2, "0"))}<h2>${item}</h2></article>`).join("")}</div>`;
+      }
+
+      function steps(items) {
+        return `<div class="steps">${items.map((item, i) => `<div class="step-row">${badge(String(i + 1).padStart(2, "0"))}<span>${item}</span></div>`).join("")}</div>`;
+      }
+
+      function compare(left, right) {
+        const side = (data, featured) => `<article class="card ${featured ? "featured" : ""}">${badge(featured ? "With Hermes" : "Before")}<h2>${data[0]}</h2><p>${data[1]}</p><div class="points">${data[2].map((p) => `<div>✓ ${p}</div>`).join("")}</div></article>`;
+        return `<div class="compare">${side(left, false)}${side(right, true)}</div>`;
+      }
+
+      function renderSlide(slide, i) {
+        if (slide.kind === "cover") {
+          return `<section class="slide cover" data-index="${i}"><div class="cover-line"></div><div class="cover-nav"><span>HERMES</span><span>AGENT</span><span>COMMUNITY</span></div><div class="content"><div class="kicker">Document Harness</div><h1>${slide.title}</h1>${body(slide.body)}</div><div class="footer"><span>Sionic AI · Document Harness Studio</span><span>2026.05.09 · Seoul</span></div></section>`;
+        }
+        const title = `<h1>${slide.title}</h1>`;
+        let extra = "";
+        if (slide.cards) extra = cards(slide.cards);
+        if (slide.steps && slide.kind === "flow") extra = flow(slide.steps);
+        if (slide.steps && slide.kind === "steps") extra = steps(slide.steps);
+        if (slide.left) extra = compare(slide.left, slide.right);
+        if (slide.note) extra += `<div class="note">${slide.note}</div>`;
+        const dividerClass = slide.kind === "divider" ? " divider" : "";
+        return `<section class="slide${dividerClass}" data-index="${i}">${brand(slide.section)}<div class="content">${slide.kicker ? `<div class="kicker">${slide.kicker}</div>` : ""}${title}${body(slide.body)}${extra}</div>${footer(i)}</section>`;
+      }
+
+      deck.innerHTML = slides.map(renderSlide).join("");
+
+      let index = Math.max(0, Math.min(total - 1, Number(new URLSearchParams(location.search).get("p") || 0)));
+
+      function show(next) {
+        index = Math.max(0, Math.min(total - 1, next));
+        document.querySelectorAll(".slide").forEach((el, i) => el.classList.toggle("active", i === index));
+        progress.style.setProperty("--index", index);
+        progress.style.setProperty("--total", total);
+        history.replaceState(null, "", `?p=${index}`);
+      }
+
+      window.addEventListener("keydown", (event) => {
+        if (["ArrowRight", " ", "PageDown"].includes(event.key)) show(index + 1);
+        if (["ArrowLeft", "PageUp"].includes(event.key)) show(index - 1);
+        if (event.key === "Home") show(0);
+        if (event.key === "End") show(total - 1);
+      });
+
+      let startX = 0;
+      deck.addEventListener("pointerdown", (event) => (startX = event.clientX));
+      deck.addEventListener("pointerup", (event) => {
+        const dx = event.clientX - startX;
+        if (Math.abs(dx) > 60) show(index + (dx < 0 ? 1 : -1));
+      });
+
+      show(index);
+    </script>
+  </body>
+</html>
