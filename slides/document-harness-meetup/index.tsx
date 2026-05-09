@@ -25,7 +25,7 @@ const tokens = {
   red: '#d94b4b',
   padX: 112,
   padY: 78,
-  total: 30,
+  total: 37,
 } as const;
 
 const fill: CSSProperties = {
@@ -694,6 +694,41 @@ const slides: SlideSpec[] = [
     ],
   },
   {
+    kind: 'story',
+    section: 'Meet the user',
+    kicker: '오늘의 주인공',
+    title: (
+      <>
+        김리드는 월요일 오전까지
+        <br />
+        <Blue>임상 브리핑</Blue>을 제출해야 합니다.
+      </>
+    ),
+    body: '그는 개발자가 아닙니다. 하지만 매주 새로운 논문과 RCT 자료를 읽고, 내부 의사결정자가 볼 수 있는 DOCX 보고서와 PPTX 요약본을 만들어야 합니다.',
+    note: (
+      <>
+        이 발표의 주인공은 도구를 만드는 사람이 아니라, <Blue>문서를 매일 끝내야 하는 사람</Blue>입니다.
+      </>
+    ),
+  },
+  {
+    kind: 'cards',
+    section: 'Monday morning',
+    kicker: '월요일 오전 9시 전',
+    title: (
+      <>
+        필요한 것은 글 한 덩어리가 아니라
+        <br />
+        <Blue>제출 가능한 패키지</Blue>입니다.
+      </>
+    ),
+    cards: [
+      { label: 'DOCX', title: '임상 브리핑 본문', body: '표지, 핵심 요약, 근거, 인용이 들어간 내부 문서입니다.', tone: 'ink' },
+      { label: 'PPTX', title: '회의용 슬라이드', body: '임원 회의에서 바로 넘겨볼 수 있는 짧은 발표자료입니다.', tone: 'blue' },
+      { label: 'Evidence', title: '검증 기록', body: '어떤 출처를 봤고 무엇을 확인했는지 남는 체크리스트입니다.', tone: 'green' },
+    ],
+  },
+  {
     kind: 'divider',
     section: '02 / Problem',
     title: (
@@ -745,6 +780,25 @@ const slides: SlideSpec[] = [
   },
   {
     kind: 'story',
+    section: 'Actual conversation',
+    kicker: '실제 반복되는 대화',
+    title: (
+      <>
+        김리드는 문서를 맡길 때마다
+        <br />
+        <Blue>작업 설명서</Blue>를 다시 씁니다.
+      </>
+    ),
+    body: '“대상은 내부 MA 리드입니다. 결론을 먼저 주세요. 인용은 Primary RCT와 NCT id 기준입니다. PPT는 28pt 이상이고 제목이 잘리면 안 됩니다.”',
+    note: (
+      <>
+        이 설명은 문서 내용이 아닙니다. 하지만 매번 빠지면 결과물이 다시 틀어지는 <Blue>업무 운영 지식</Blue>
+        입니다.
+      </>
+    ),
+  },
+  {
+    kind: 'story',
     section: 'Real risk',
     kicker: '진짜 비용',
     title: (
@@ -755,6 +809,29 @@ const slides: SlideSpec[] = [
       </>
     ),
     body: '처음부터 글을 쓰는 시간보다, 사람과 도구 사이에서 기준을 다시 맞추고 빠진 항목을 확인하는 시간이 더 커집니다.',
+  },
+  {
+    kind: 'compare',
+    section: 'Human cost',
+    kicker: '사람이 감당하는 비용',
+    title: (
+      <>
+        문제는 시간이 아니라
+        <br />
+        <Blue>주의력의 소모</Blue>입니다.
+      </>
+    ),
+    left: {
+      title: '문서 내용에 쓰고 싶은 시간',
+      body: '새 연구 결과가 무엇을 의미하는지 판단하고, 의사결정자가 이해할 수 있게 정리하는 시간입니다.',
+      points: ['핵심 근거 판단', '메시지 우선순위', '회의 의사결정 지원'],
+    },
+    right: {
+      title: '실제로 반복되는 시간',
+      body: '양식, 인용, 톤, 글자 크기, 누락 체크를 매번 다시 맞추는 운영 시간입니다.',
+      points: ['형식 재설명', '도구 간 복사', '검수 기준 재확인'],
+      tone: 'blue',
+    },
   },
   {
     kind: 'divider',
@@ -803,6 +880,25 @@ const slides: SlideSpec[] = [
       </>
     ),
     steps: ['자료 입력', '플랜 확정', '초안 작성', '편집 확인', '검증', '산출물 저장'],
+  },
+  {
+    kind: 'steps',
+    section: 'First run scene',
+    kicker: '첫 번째 실행 장면',
+    title: (
+      <>
+        처음에는 사람이
+        <br />
+        <Blue>기준을 확정</Blue>합니다.
+      </>
+    ),
+    body: 'Document Harness는 마법처럼 추측하지 않습니다. 사용자가 실제 업무 기준을 확인하고, 그 기준을 다음 실행에 남깁니다.',
+    steps: [
+      '김리드가 새 RCT 자료와 기존 보고서 양식을 넣습니다.',
+      '청중, 길이, 인용 방식, PPT 글자 크기를 확인합니다.',
+      '에이전트가 DOCX 초안과 PPTX 요약본을 생성합니다.',
+      '검토자가 수정한 기준이 다음 실행의 기억 후보가 됩니다.',
+    ],
   },
   {
     kind: 'cards',
@@ -869,6 +965,24 @@ const slides: SlideSpec[] = [
       points: ['기준 자동 채움', '기본 템플릿 선택', '검증 루틴 재사용', '새 자료만 추가'],
       tone: 'green',
     },
+  },
+  {
+    kind: 'story',
+    section: 'Second run scene',
+    kicker: '두 번째 실행 장면',
+    title: (
+      <>
+        다음 주에는 김리드가
+        <br />
+        <Blue>새 자료만</Blue> 넣습니다.
+      </>
+    ),
+    body: '에이전트는 지난번에 확정한 청중, 톤, 인용 방식, PPT 글자 크기, 검증 체크리스트를 먼저 불러옵니다. 사용자는 “이번 분기 새 RCT만 반영해줘”라고 말하면 됩니다.',
+    note: (
+      <>
+        이 순간부터 제품의 가치는 생성 속도가 아니라 <Blue>반복 설명이 사라지는 경험</Blue>으로 바뀝니다.
+      </>
+    ),
   },
   {
     kind: 'cards',
@@ -1175,6 +1289,24 @@ const slides: SlideSpec[] = [
         body: '설치 없이 브라우저에서 바로 볼 수 있는 링크를 함께 제공합니다.',
         tone: 'amber',
       },
+    ],
+  },
+  {
+    kind: 'steps',
+    section: 'Try it now',
+    kicker: '발표가 끝난 뒤 할 일',
+    title: (
+      <>
+        지금 바로 해볼 일은
+        <br />
+        <Blue>세 단계</Blue>입니다.
+      </>
+    ),
+    body: '이 덱은 설명으로 끝나지 않도록 GitHub와 Vercel에 공개되어 있습니다. 팀원에게 링크를 보내고, ZIP을 받아서 Open Slide workspace로 실행할 수 있습니다.',
+    steps: [
+      'Vercel 링크로 발표 흐름을 바로 봅니다.',
+      'GitHub에서 ZIP을 받아 슬라이드 소스를 확인합니다.',
+      'npm install 후 npm run dev로 Open Slide에서 직접 편집합니다.',
     ],
   },
   {
